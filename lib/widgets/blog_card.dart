@@ -1,72 +1,100 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../models/blog.dart';
-import 'author_row.dart';
-import 'category_chip.dart';
+import 'package:intl/intl.dart';
+import '../models/blog_model.dart';
 
 class BlogCard extends StatelessWidget {
-  final Blog blog;
+  final BlogModel blog;
   final VoidCallback onTap;
+
   const BlogCard({super.key, required this.blog, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.07),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+    final theme = Theme.of(context);
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      clipBehavior: Clip.antiAlias,
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(16)),
-              child: Image.network(
-                blog.imageUrl,
+            if (blog.imageUrl != null && blog.imageUrl!.isNotEmpty)
+              CachedNetworkImage(
+                imageUrl: blog.imageUrl!,
                 height: 180,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                placeholder: (context, url) => Container(
                   height: 180,
-                  color: Colors.grey[200],
-                  child: const Icon(Icons.image, size: 48, color: Colors.grey),
+                  color: theme.colorScheme.surfaceContainerHighest,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+                errorWidget: (context, url, err) => Container(
+                  height: 180,
+                  color: theme.colorScheme.surfaceContainerHighest,
+                  child: const Icon(Icons.broken_image, size: 48),
                 ),
               ),
-            ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CategoryChip(label: blog.category),
-                  const SizedBox(height: 8),
-                  Text(
-                    blog.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold, height: 1.3),
-                  ),
+                  if (blog.categoryName != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        blog.categoryName!,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onPrimaryContainer,
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 6),
                   Text(
-                    blog.description,
-                    maxLines: 3,
+                    blog.title,
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 13, color: Colors.grey[600], height: 1.5),
                   ),
-                  const SizedBox(height: 12),
-                  AuthorRow(authorName: blog.authorName, date: blog.date),
+                  const SizedBox(height: 4),
+                  Text(
+                    blog.description,
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(Icons.person_outline, size: 14),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          blog.authorName ?? 'Unknown',
+                          style: theme.textTheme.labelSmall,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        DateFormat('MMM d, y').format(blog.createdAt),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
