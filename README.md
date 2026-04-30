@@ -1,16 +1,153 @@
-# blog_pro
+# 📱 Flutter Blog App
 
-A new Flutter project.
+A modern Flutter-based blog application built using **MVVM architecture**, **Supabase backend**, and **Provider state management**.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🚀 Features
 
-A few resources to get you started if this is your first Flutter project:
+### 🔐 Authentication
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+* Email & Password Signup/Login
+* Supabase Authentication integration
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 📝 Blog Management
+
+* Create blog posts
+* View all blogs
+* Edit blog posts
+* Delete blogs
+
+### 🗂️ Categories
+
+* Categorize blogs
+* Filter blogs by category
+
+### 👤 User Profile
+
+* View user details
+* Logout functionality
+
+---
+
+## 🧱 Architecture
+
+The app follows **MVVM (Model-View-ViewModel)** architecture:
+
+* **Model** → Data models (Blog, User, Category)
+* **View** → UI Screens
+* **ViewModel** → Business logic using Provider
+
+---
+
+## 🛠️ Tech Stack
+
+* **Flutter**
+* **Dart**
+* **Supabase** (Backend & Auth)
+* **Provider** (State Management)
+* **Dio** (API handling)
+
+---
+
+## 📂 Project Structure
+
+```
+lib/
+ ├── core/
+ ├── models/
+ ├── viewmodels/
+ ├── views/
+ ├── widgets/
+ └── main.dart
+```
+
+---
+
+## ⚙️ Setup Instructions
+
+1. Clone the repository:
+
+```
+git clone https://github.com/YOUR_USERNAME/flutter-blog-ui.git
+```
+
+2. Navigate to project:
+
+```
+cd flutter-blog-ui
+```
+
+3. Install dependencies:
+
+```
+flutter pub get
+```
+
+4. Add your Supabase credentials:
+
+Update:
+
+```
+lib/core/constants/app_constants.dart
+```
+
+```
+supabaseUrl = YOUR_SUPABASE_URL
+supabaseAnonKey = YOUR_SUPABASE_ANON_KEY
+```
+
+5. Run the app:
+
+```
+flutter run
+```
+
+---
+
+## ⚠️ Issue Faced
+
+### ❌ Supabase Host Lookup Error
+
+**Error:**
+
+```
+Failed host lookup: your_project.supabase.co
+```
+
+**Cause:**
+
+* Placeholder URL used instead of actual Supabase project URL
+
+**Fix:**
+
+* Replaced with correct Supabase URL
+* Cleaned and rebuilt the project
+
+---
+
+## 📸 Screenshots
+
+*(Add your app screenshots here)*
+
+---
+
+## 📈 Future Improvements
+
+* Image upload for blogs
+* Form validation
+* Search functionality
+* Pagination
+* Improved UI animations
+
+---
+
+## 👤 Author
+
+Parvin
+
+---
+
+## ⭐ If you like this project
+
+Give it a ⭐ on GitHub!
