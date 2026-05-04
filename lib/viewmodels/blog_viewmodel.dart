@@ -28,7 +28,7 @@ class BlogViewModel extends ChangeNotifier {
       debugPrint('[BlogVM] fetchBlogs: start');
       final data = await _supabase.client
           .from(AppConstants.blogsTable)
-          .select('*')
+          .select('*, profiles!author_id(username)')
           .order('created_at', ascending: false);
       _blogs = (data as List).map((e) => BlogModel.fromJson(e)).toList();
       _error = null;
