@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../core/constants/app_constants.dart';
 import '../core/services/supabase_service.dart';
@@ -24,14 +25,19 @@ class BlogViewModel extends ChangeNotifier {
   Future<void> fetchBlogs() async {
     _setLoading(true);
     try {
+      debugPrint('[BlogVM] fetchBlogs: start');
       final data = await _supabase.client
           .from(AppConstants.blogsTable)
-          .select('*, categories(name), profiles(username)')
+          .select('*')
           .order('created_at', ascending: false);
       _blogs = (data as List).map((e) => BlogModel.fromJson(e)).toList();
       _error = null;
-    } catch (e) {
+      debugPrint('[BlogVM] fetchBlogs: got ${_blogs.length} blogs');
+      notifyListeners();
+    } catch (e, st) {
       _error = e.toString();
+      debugPrint('[BlogVM] fetchBlogs error: $e\n$st');
+      notifyListeners();
     } finally {
       _setLoading(false);
     }
@@ -60,13 +66,16 @@ class BlogViewModel extends ChangeNotifier {
   Future<bool> addBlog(BlogModel blog) async {
     _setLoading(true);
     try {
+      debugPrint('[BlogVM] addBlog: inserting ${blog.title}');
       await _supabase.client
           .from(AppConstants.blogsTable)
           .insert(blog.toJson());
+      debugPrint('[BlogVM] addBlog: insert success, refreshing');
       await fetchBlogs();
       return true;
-    } catch (e) {
+    } catch (e, st) {
       _error = e.toString();
+      debugPrint('[BlogVM] addBlog error: $e\n$st');
       notifyListeners();
       return false;
     } finally {

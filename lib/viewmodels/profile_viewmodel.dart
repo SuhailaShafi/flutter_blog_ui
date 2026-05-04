@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../core/constants/app_constants.dart';
 import '../core/services/supabase_service.dart';
@@ -41,15 +42,20 @@ class ProfileViewModel extends ChangeNotifier {
   Future<void> fetchUserBlogs(String userId) async {
     _setLoading(true);
     try {
+      debugPrint('[ProfileVM] fetchUserBlogs: userId=$userId');
       final data = await _supabase.client
           .from(AppConstants.blogsTable)
-          .select('*, categories(name), profiles(username)')
+          .select('*')
           .eq('author_id', userId)
           .order('created_at', ascending: false);
       _userBlogs = (data as List).map((e) => BlogModel.fromJson(e)).toList();
       _error = null;
-    } catch (e) {
+      debugPrint('[ProfileVM] fetchUserBlogs: got ${_userBlogs.length} blogs');
+      notifyListeners();
+    } catch (e, st) {
       _error = e.toString();
+      debugPrint('[ProfileVM] fetchUserBlogs error: $e\n$st');
+      notifyListeners();
     } finally {
       _setLoading(false);
     }

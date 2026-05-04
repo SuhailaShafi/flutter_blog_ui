@@ -29,10 +29,10 @@ class BlogModel {
         description: json['description'] as String,
         imageUrl: json['image_url'] as String?,
         categoryId: json['category_id'] as String?,
-        authorId: json['author_id'] as String,
+        authorId: (json['author_id'] as String?) ?? '',
         createdAt: DateTime.parse(json['created_at'] as String),
-        categoryName: json['categories']?['name'] as String?,
-        authorName: json['profiles']?['username'] as String?,
+        categoryName: (json['categories'] as Map?)?['name'] as String?,
+        authorName: (json['profiles'] as Map?)?['username'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
