@@ -45,7 +45,7 @@ class ProfileViewModel extends ChangeNotifier {
       debugPrint('[ProfileVM] fetchUserBlogs: userId=$userId');
       final data = await _supabase.client
           .from(AppConstants.blogsTable)
-          .select('*')
+          .select('*, profiles!author_id(username)')
           .eq('author_id', userId)
           .order('created_at', ascending: false);
       _userBlogs = (data as List).map((e) => BlogModel.fromJson(e)).toList();

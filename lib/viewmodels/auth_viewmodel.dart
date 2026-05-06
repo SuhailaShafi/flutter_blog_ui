@@ -49,6 +49,23 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  String _friendlyError(String raw) {
+    final msg = raw.toLowerCase();
+    if (msg.contains('invalid login') || msg.contains('invalid credentials') || msg.contains('wrong password')) {
+      return 'Incorrect email or password.';
+    }
+    if (msg.contains('email not confirmed')) return 'Please verify your email first.';
+    if (msg.contains('user not found') || msg.contains('no user found')) return 'No account found with this email.';
+    if (msg.contains('already registered') || msg.contains('already exists') || msg.contains('duplicate')) {
+      return 'An account with this email already exists.';
+    }
+    if (msg.contains('password should be') || msg.contains('weak password')) return 'Password is too weak. Use at least 6 characters.';
+    if (msg.contains('network') || msg.contains('socket') || msg.contains('connection')) {
+      return 'Network error. Check your internet connection.';
+    }
+    return 'Something went wrong. Please try again.';
+  }
+
   Future<bool> login(String email, String password) async {
     _setLoading(true);
     try {
@@ -60,10 +77,10 @@ class AuthViewModel extends ChangeNotifier {
       _error = null;
       return true;
     } on AuthException catch (e) {
-      _error = e.message;
+      _error = _friendlyError(e.message);
       return false;
     } catch (e) {
-      _error = e.toString();
+      _error = _friendlyError(e.toString());
       return false;
     } finally {
       _setLoading(false);
@@ -90,10 +107,10 @@ class AuthViewModel extends ChangeNotifier {
       _error = null;
       return true;
     } on AuthException catch (e) {
-      _error = e.message;
+      _error = _friendlyError(e.message);
       return false;
     } catch (e) {
-      _error = e.toString();
+      _error = _friendlyError(e.toString());
       return false;
     } finally {
       _setLoading(false);
