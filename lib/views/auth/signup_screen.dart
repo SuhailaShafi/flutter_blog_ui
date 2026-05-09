@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/validators.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../widgets/gradient_button.dart';
@@ -136,10 +137,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             controller: _usernameCtrl,
                             label: 'Username',
                             prefixIcon: Icons.person_outline,
-                            validator: (v) =>
-                                (v == null || v.trim().isEmpty)
-                                    ? 'Required'
-                                    : null,
+                            validator: Validators.username,
                           ),
                           const SizedBox(height: 16),
                           CustomTextField(
@@ -147,10 +145,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             label: 'Email',
                             prefixIcon: Icons.email_outlined,
                             keyboardType: TextInputType.emailAddress,
-                            validator: (v) =>
-                                (v == null || !v.contains('@'))
-                                    ? 'Enter valid email'
-                                    : null,
+                            validator: Validators.email,
                           ),
                           const SizedBox(height: 16),
                           CustomTextField(
@@ -168,10 +163,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               onPressed: () =>
                                   setState(() => _obscure = !_obscure),
                             ),
-                            validator: (v) =>
-                                (v == null || v.length < 6)
-                                    ? 'Min 6 characters'
-                                    : null,
+                            validator: Validators.password,
                           ),
                           const SizedBox(height: 24),
                           GradientButton(
